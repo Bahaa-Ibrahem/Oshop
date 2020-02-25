@@ -1,0 +1,38 @@
+<h1>Shopping Cart</h1>
+<ng-container *ngIf="cart$ | async as cart">
+    <p>
+        <label>You have <strong> {{ cart.totalItemCount }} </strong> items in your shopping cart.</label>
+        <button *ngIf="cart.totalItemCount > 0" (click)='clearCart()' class='float-right btn btn-light btn-sm'>Clear Shopping Cart </button>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Product</th>
+                <th class="text-center" style="width: 230px;">Quantity</th>
+                <th class="text-right" style="width: 200px;">Price</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="cart.totalItemCount > 0">
+            <tr *ngFor="let producId of cart.productIds">
+                <ng-container *ngIf="cart.items[producId].quantity > 0">
+                    <td> <div class="thumbnail" [style.backgroundImage]="'url(' + cart.items[producId].product.imageUrl + ')'"></div> </td>
+                    <td> {{ cart.items[producId].product.title }} </td>
+                    <td>
+                        <product-quantity [shopping-cart]="cart" [product]="cart.items[producId].product"></product-quantity>
+                    </td>
+                    <td class="text-right"> {{ (cart.items[producId].product.price * cart.items[producId].quantity) | currency:'USD' }} </td>
+                </ng-container>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="text-right"> {{ cart.totalPrice | currency:'USD' }} </th>
+            </tr>
+        </tfoot>
+    </table>
+    <a *ngIf="cart.totalItemCount > 0" routerLink="/check-out" class="btn btn-primary">Check Out</a>
+</ng-container>

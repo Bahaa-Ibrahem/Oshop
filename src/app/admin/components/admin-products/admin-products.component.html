@@ -1,0 +1,32 @@
+<a routerLink="/admin/products/new" class="btn btn-primary">New Product</a><br><br>
+<input #query (keyup)="filter(query.value)" placeholder="Searching..." type="text" class="form-control">
+
+<table class="table table-striped" ng8DataTable [data]="filterdProducts" #table="ng8DataTable" [rowsOnPage]="5" sortBy="title" sortOrder="asc">
+    <thead>
+        <tr>
+            <th>
+              <ng8-column-sorter sortBy="title">Title</ng8-column-sorter>
+            </th>
+            <th>
+              <ng8-column-sorter sortBy="price">Price</ng8-column-sorter>
+            </th>
+            <th>
+              <ng8-column-sorter></ng8-column-sorter>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of table.data">
+        <td>{{ item.title }}</td>
+        <td>{{ item.price | currency:'USD':true }}</td>
+        <td>
+            <a [routerLink]="['/admin/products/', item.key]">Edit</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="row">
+  <div class="col-lg-12 d-flex justify-content-center">
+    <button class="btn btn-primary" (click)="table.setPage(1, table.rowsOnPage + 5)">Load More</button>
+  </div>
+</div>
